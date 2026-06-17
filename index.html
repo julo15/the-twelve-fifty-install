@@ -94,31 +94,6 @@
   .footer{margin-top:22px; font-size:clamp(14px,3.6vw,17px); color:#9a916f; font-style:italic}
   .heart{color:#ff8da6; font-style:normal}
 
-  /* ===== bonus rebate coupon ===== */
-  #bonus{margin-top:40px; opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s cubic-bezier(.2,.9,.25,1)}
-  #bonus.show{opacity:1; transform:none}
-  .more{font-family:"Playfair Display",serif; font-style:italic; font-size:clamp(19px,5.2vw,25px); color:#e7dfca; margin-bottom:20px}
-  .coupon{position:relative; max-width:420px; margin:0 auto; padding:26px 26px 24px;
-    background:linear-gradient(180deg,#1a1530,#120e22);
-    border:2px dashed rgba(244,210,122,.6); border-radius:16px;
-    box-shadow:0 24px 60px rgba(0,0,0,.5), 0 0 40px rgba(244,210,122,.12)}
-  .notch{position:absolute; top:50%; width:26px; height:26px; border-radius:50%; background:#05060c; transform:translateY(-50%)}
-  .notch.l{left:-15px} .notch.r{right:-15px}
-  .clabel{font-size:clamp(11px,3vw,13px); letter-spacing:.34em; text-transform:uppercase; color:var(--gold); margin-bottom:8px}
-  .camt{font-family:"Playfair Display",serif; font-weight:800; color:var(--gold-hi);
-    font-size:clamp(46px,15vw,76px); line-height:1; text-shadow:0 2px 22px rgba(244,210,122,.45)}
-  .camt .cur{font-size:.5em; vertical-align:.55em; margin-right:.04em} .camt .cents{font-size:.5em; vertical-align:.55em}
-  .camt .cback{font-family:"Cormorant Garamond",serif; font-weight:600; font-style:italic; font-size:.3em; color:var(--muted); margin-left:.15em; vertical-align:.2em}
-  .cterms{font-size:clamp(14px,3.7vw,17px); color:var(--muted); line-height:1.5; margin:12px auto 4px; max-width:300px}
-  .cbtn{display:inline-block; margin-top:18px; text-decoration:none; cursor:pointer;
-    font-family:"Cormorant Garamond",serif; font-weight:700; font-size:clamp(16px,4.6vw,21px); color:#1a3a16;
-    background:linear-gradient(180deg,#b8f5c0,#6ee79a 55%,#34c46e); border-radius:999px; padding:14px 30px;
-    box-shadow:0 12px 30px rgba(52,196,110,.4), inset 0 1px 0 rgba(255,255,255,.6); animation:pulse2 1.7s ease-in-out infinite}
-  @keyframes pulse2{0%,100%{box-shadow:0 12px 30px rgba(52,196,110,.4),0 0 0 0 rgba(110,231,154,.4)}
-                    50%{box-shadow:0 12px 30px rgba(52,196,110,.4),0 0 0 13px rgba(110,231,154,0)}}
-  .cbtn:active{transform:translateY(1px) scale(.99)}
-  .cfine{margin-top:14px; font-size:clamp(10px,2.7vw,12px); color:#7a7560; font-style:italic}
-
   /* TAP CUE */
   #tapcue{position:fixed; left:50%; bottom:30px; transform:translateX(-50%); z-index:18; text-align:center; pointer-events:none;
     transition:opacity .3s ease}
@@ -149,21 +124,6 @@
 
 <script>
 const CMD = "git clone https://github.com/Beingpax/VoiceInk\ncd VoiceInk\nmake local";
-
-/* ===== rebate stage config ===== */
-const PHONE = "";                               // intentionally blank — never hardcode a real number in a public page
-const REBATE_MSG = "yes hi 👋 per the Official VoiceInk Certificate of Installation, i am owed a $12 rebate and i have Come To Collect 🫡 i accept the $0.50 processing fee under protest 🪦 please remit at your earliest convenience 🙏💸";
-
-const BONUS_HTML = `
-  <div class="more">…oh. And one more thing. 🎁</div>
-  <div class="coupon">
-    <span class="notch l"></span><span class="notch r"></span>
-    <div class="clabel">✦ Exclusive Loyalty Rebate ✦</div>
-    <div class="camt"><span class="cur">$</span>12<span class="cents">.00</span> <span class="cback">back</span></div>
-    <div class="cterms">A token of my gratitude. Redeemable instantly. One per valued friend.</div>
-    <a class="cbtn" id="rebate" href="#">💸 &nbsp;Yes, I want my rebate →</a>
-    <div class="cfine">*A $0.50 non-refundable processing fee applies.</div>
-  </div>`;
 
 /* odyssey chapters: [roman, text, tabs, time] */
 const beats = [
@@ -226,23 +186,6 @@ const steps = [
         // fire-and-forget copy with fallback
         try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(CMD).catch(fallbackCopy); } else { fallbackCopy(); } }
         catch(_){ fallbackCopy(); }
-        // …oh, and one more thing — swap to a fresh CENTERED coupon slide (reliable on mobile, no scrolling)
-        if(!btn.dataset.bonus){ btn.dataset.bonus=1;
-          setTimeout(()=>{
-            card.classList.add('out');
-            setTimeout(()=>{
-              card.innerHTML=BONUS_HTML;
-              const reb=document.getElementById('rebate');
-              // if PHONE is set, address it; otherwise open Messages with just the prefilled body
-              reb.setAttribute('href', PHONE ? 'sms:'+PHONE+'?&body='+encodeURIComponent(REBATE_MSG)
-                                              : 'sms:?&body='+encodeURIComponent(REBATE_MSG));
-              reb.addEventListener('click',ev=>ev.stopPropagation());
-              card.classList.remove('out');
-              fitCheck();
-              setTimeout(()=>grandBurst(), 220);
-            }, 260);
-          }, 1300);
-        }
       }); } },
 ];
 
